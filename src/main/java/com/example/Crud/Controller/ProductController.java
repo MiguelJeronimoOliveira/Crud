@@ -5,6 +5,7 @@ import com.example.Crud.Entities.Product;
 import com.example.Crud.Repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.function.EntityResponse;
@@ -49,6 +50,16 @@ public class ProductController {
             return ResponseEntity.ok(product);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity DeleteProduct(@PathVariable UUID id){
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isPresent()){
+            productRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }
