@@ -27,6 +27,28 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
+    @PostMapping("/addproduct")
+    public ResponseEntity AddProduct(@RequestBody RequestProduct request ){
 
+        Product newProduct = new Product(request);
+        productRepository.save(newProduct);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/updateproduct")
+    public ResponseEntity UpdateProduct(@RequestBody RequestProduct request){
+        Optional<Product> productOptional = productRepository.findById(request.id());
+
+        if(productOptional.isPresent()){
+            Product product = productOptional.get();
+
+            product.setNome(request.nome());
+            product.setPreco(request.preco());
+
+            return ResponseEntity.ok(product);
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 }
