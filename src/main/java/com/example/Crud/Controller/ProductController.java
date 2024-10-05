@@ -21,6 +21,10 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    ProductRepository productRepository;
+
+
     @GetMapping("/products")
     public ResponseEntity AllProduts(){
 
@@ -40,7 +44,6 @@ public class ProductController {
     @PutMapping("/updateproduct")
     public ResponseEntity UpdateProduct(@RequestBody RequestProduct request){
         Optional<Product> productOptional = productService.ProcurarPorId(request.id());
-
         if(productOptional.isPresent()){
             Product product = productOptional.get();
 
