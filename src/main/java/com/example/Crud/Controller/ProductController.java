@@ -3,6 +3,7 @@ package com.example.Crud.Controller;
 import com.example.Crud.DTOS.RequestProduct;
 import com.example.Crud.Entities.Product;
 import com.example.Crud.Repositories.ProductRepository;
+import com.example.Crud.Services.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,12 @@ import java.util.UUID;
 public class ProductController {
 
     @Autowired
-    ProductRepository productRepository;
+    ProductService productService;
 
     @GetMapping("/products")
     public ResponseEntity AllProduts(){
 
-        var products = productRepository.findAll();
+        var products = productService.ListarProdutos();
 
         return ResponseEntity.ok(products);
     }
@@ -31,15 +32,14 @@ public class ProductController {
     @PostMapping("/addproduct")
     public ResponseEntity AddProduct(@RequestBody RequestProduct request ){
 
-        Product newProduct = new Product(request);
-        productRepository.save(newProduct);
+        productService.SalvarProduto(request);
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/updateproduct")
     public ResponseEntity UpdateProduct(@RequestBody RequestProduct request){
-        Optional<Product> productOptional = productRepository.findById(request.id());
+        Optional<Product> productOptional = productService.ProcurarPorId(request.id());
 
         if(productOptional.isPresent()){
             Product product = productOptional.get();
@@ -54,9 +54,9 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity DeleteProduct(@PathVariable UUID id){
-        Optional<Product> productOptional = productRepository.findById(id);
+        Optional<Product> productOptional = productService.ProcurarPorId(id);
         if(productOptional.isPresent()){
-            productRepository.deleteById(id);
+            productService.DeletarPorId(id);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
