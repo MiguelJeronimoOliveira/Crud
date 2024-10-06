@@ -21,10 +21,6 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @Autowired
-    ProductRepository productRepository;
-
-
     @GetMapping("/products")
     public ResponseEntity AllProduts(){
 
@@ -49,6 +45,8 @@ public class ProductController {
 
             product.setNome(request.nome());
             product.setPreco(request.preco());
+
+            productService.SalvarAtuliazicao(product);
 
             return ResponseEntity.ok(product);
         }
