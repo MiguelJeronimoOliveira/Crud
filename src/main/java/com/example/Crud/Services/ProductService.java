@@ -21,6 +21,10 @@ public class ProductService {
         productRepository.save(NovoProduto);
     }
 
+    public void SalvarAtuliazicao(Product produto){
+        productRepository.save(produto);
+    }
+
     public List<Product> ListarProdutos(){
         List<Product> produtos = productRepository.findAll();
 
